@@ -1,5 +1,5 @@
 # ============================================================
-# Group Manager Bot (DEBUG VERSION)
+# Group Manager Bot (FINAL DEBUG VERSION)
 # ============================================================
 
 import os
@@ -12,7 +12,10 @@ logging.basicConfig(level=logging.INFO)
 
 print("🚀 Starting bot...")
 
-# 🔍 ENV DEBUG (VERY IMPORTANT)
+# ============================================================
+# 🔍 ENV DEBUG
+# ============================================================
+
 try:
     print("🔍 Checking ENV variables...")
     print("API_ID:", os.getenv("API_ID"))
@@ -23,7 +26,10 @@ except Exception as e:
     print("❌ ENV ERROR:", e)
     traceback.print_exc()
 
-# 🔐 Security check
+# ============================================================
+# 🔐 SECURITY CHECK
+# ============================================================
+
 try:
     from security import verify_integrity, get_runtime_key
 
@@ -40,14 +46,22 @@ except Exception as e:
     traceback.print_exc()
     raise
 
-# 🌐 Web server
+# ============================================================
+# 🌐 WEB SERVER (FOR RENDER)
+# ============================================================
+
 PORT = int(os.environ.get("PORT", 10000))
 
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(b"Nomade Help Bot is running")
+        self.wfile.write(b"Nomade Bot is running")
+
+    # 🔥 FIX: Prevent 501 error spam
+    def do_HEAD(self):
+        self.send_response(200)
+        self.end_headers()
 
 def start_web_server():
     try:
@@ -60,9 +74,12 @@ def start_web_server():
 
 threading.Thread(target=start_web_server, daemon=True).start()
 
-# 🤖 Bot start
+# ============================================================
+# 🤖 BOT START (MAIN FIX AREA)
+# ============================================================
+
 try:
-    from pyrogram import Client
+    from pyrogram import Client, idle
     from config import API_ID, API_HASH, BOT_TOKEN
     from handlers import register_all_handlers
 
@@ -77,9 +94,16 @@ try:
 
     register_all_handlers(app)
 
-    print("✅ Bot is starting securely on Render...")
+    print("🚀 Starting bot now...")
 
-    app.run()
+    app.start()
+
+    print("✅ BOT STARTED SUCCESSFULLY 🔥")
+
+    # 👇 This keeps bot alive properly
+    idle()
+
+    print("🛑 Bot stopped")
 
 except Exception as e:
     print("💥 BOT CRASHED:", e)
