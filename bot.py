@@ -1,5 +1,5 @@
 # ============================================================
-# Group Manager Bot (FINAL DEBUG VERSION)
+# Group Manager Bot (FINAL STABLE VERSION)
 # ============================================================
 
 import os
@@ -58,7 +58,6 @@ class HealthHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b"Nomade Bot is running")
 
-    # 🔥 FIX: Prevent 501 error spam
     def do_HEAD(self):
         self.send_response(200)
         self.end_headers()
@@ -75,11 +74,11 @@ def start_web_server():
 threading.Thread(target=start_web_server, daemon=True).start()
 
 # ============================================================
-# 🤖 BOT START (MAIN FIX AREA)
+# 🤖 BOT START (FINAL FIX)
 # ============================================================
 
 try:
-    from pyrogram import Client, idle
+    from pyrogram import Client
     from config import API_ID, API_HASH, BOT_TOKEN
     from handlers import register_all_handlers
 
@@ -96,12 +95,8 @@ try:
 
     print("🚀 Starting bot now...")
 
-    app.start()
-
-    print("✅ BOT STARTED SUCCESSFULLY 🔥")
-
-    # 👇 This keeps bot alive properly
-    idle()
+    # ✅ FINAL FIX (NO EVENT LOOP ISSUE)
+    app.run()
 
     print("🛑 Bot stopped")
 
