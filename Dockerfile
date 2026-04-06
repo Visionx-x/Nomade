@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir --upgrade pip \
 ENV PYTHONUNBUFFERED=1
 
 # Run the bot..
-CMD ["python", "main.py"]
+CMD ["python", "bot.py"]
