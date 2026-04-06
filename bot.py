@@ -1,4 +1,15 @@
 # ============================================================
+# 🔥 CRITICAL FIX (MUST BE FIRST - EVENT LOOP PATCH)
+# ============================================================
+
+import asyncio
+
+try:
+    asyncio.get_event_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
+
+# ============================================================
 # Group Manager Bot (FINAL STABLE VERSION)
 # ============================================================
 
@@ -95,7 +106,7 @@ try:
 
     print("🚀 Starting bot now...")
 
-    # ✅ FINAL FIX (NO EVENT LOOP ISSUE)
+    # ✅ FINAL FIX (SAFE FOR ALL PYTHON VERSIONS)
     app.run()
 
     print("🛑 Bot stopped")
